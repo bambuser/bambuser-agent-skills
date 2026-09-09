@@ -7,13 +7,13 @@
 | **`bambuser-integration`** | Developers integrating Bambuser into a site or app | Embeds, cart/product data, tracking, regions, SSO, mobile SDKs, REST APIs, App Framework |
 | **`bambuser-knowledge`** | Anyone *using* Bambuser — hosts, agents, marketers, PMs | Dashboard how-tos, broadcasting/RTMP, bookings, moderation, stats, capabilities & limits |
 
-Both are deliberately **thin**: the durable concepts and gotchas live in the skill, and the latest specifics are **fetched at runtime** from [bambuser.com/docs](https://bambuser.com/docs) and [knowledge.bambuser.com](https://knowledge.bambuser.com), so answers stay current as the docs evolve. They work with Claude Code, Cursor, OpenAI Codex, Gemini CLI, GitHub Copilot, Amp, and other tools that support the Agent Skills standard.
+Both are deliberately **thin**: the durable concepts and gotchas live in the skill, and the latest specifics are **fetched at runtime** from [bambuser.com/docs](https://bambuser.com/docs) and [knowledge.bambuser.com](https://knowledge.bambuser.com), so answers stay current as the docs evolve. They work with Claude Code, Cursor, Codex, Antigravity CLI, GitHub Copilot, Amp, and other tools that support the Agent Skills standard.
 
 ## Install
 
 ```bash
-npx skills add bambuser/agent-skills      # into the current project
-npx skills add -g bambuser/agent-skills   # or globally, for all your projects
+npx skills add bambuser/bambuser-agent-skills      # into the current project
+npx skills add -g bambuser/bambuser-agent-skills   # or globally, for all your projects
 ```
 
 > **claude.ai users (one-time):** allow `bambuser.com` and `knowledge.bambuser.com` at [claude.ai/settings/capabilities](https://claude.ai/settings/capabilities), or the skills can't fetch the docs they rely on.
@@ -23,26 +23,62 @@ npx skills add -g bambuser/agent-skills   # or globally, for all your projects
 <details>
 <summary><b>Alternative — manual copy</b></summary>
 
-```bash
-git clone https://github.com/bambuser/agent-skills
-mkdir -p ~/.claude/skills ~/.agents/skills
-cp -r agent-skills/skills/* ~/.claude/skills/   # Claude Code (reads only .claude/skills)
-cp -r agent-skills/skills/* ~/.agents/skills/   # Cursor / Codex / Gemini / Copilot / Amp
-```
-
-For a per-project install, copy into `./.claude/skills` and `./.agents/skills` of your project instead.
-</details>
-
-<details>
-<summary><b>Alternative — <code>install.sh</code>, every agent at once</b></summary>
-
-Symlinks the Claude Code dir (so `git pull` refreshes it) and copies the neutral `.agents/skills` dir (Codex doesn't load a symlinked one):
+First, clone the repository:
 
 ```bash
-git clone https://github.com/bambuser/agent-skills
-agent-skills/install.sh --global                                # all your projects
-cd /path/to/your/project && /path/to/agent-skills/install.sh    # or per-project
+git clone https://github.com/bambuser/bambuser-agent-skills
 ```
+
+#### Global install
+
+For agents that use the shared skills directory, create it:
+
+```bash
+mkdir -p ~/.agents/skills
+```
+
+Then copy the skills:
+
+```bash
+cp -R bambuser-agent-skills/skills/. ~/.agents/skills/
+```
+
+For Claude Code, use `~/.claude/skills` instead:
+
+```bash
+mkdir -p ~/.claude/skills
+```
+
+```bash
+cp -R bambuser-agent-skills/skills/. ~/.claude/skills/
+```
+
+#### Per-project install
+
+From your project root, create the shared skills directory:
+
+```bash
+mkdir -p .agents/skills
+```
+
+Then copy the skills from the cloned repository:
+
+```bash
+cp -R /path/to/bambuser-agent-skills/skills/. .agents/skills/
+```
+
+For Claude Code, use `.claude/skills` instead:
+
+```bash
+mkdir -p .claude/skills
+```
+
+```bash
+cp -R /path/to/bambuser-agent-skills/skills/. .claude/skills/
+```
+
+Replace `/path/to/bambuser-agent-skills` with the location of your clone. Other
+agents may document a different skills directory.
 </details>
 
 ## Use
